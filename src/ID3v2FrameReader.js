@@ -75,24 +75,24 @@ frameReaderFunctions['CHAP'] = function readChaptersFrame(
   flags: ?Object,
   majorVersion?: string
 ): any {
-  console.log('chap');
+  // console.log('chap');
+  var start = offset;
   var charset = getTextEncoding(data.getByteAt(offset));
 
-  var id = data.getStringWithCharsetAt(offset+1, length-16, charset);
-  offset += 1 + id.bytesReadCount;
+  var id = data.getStringWithCharsetAt(start, length-16, charset);
+  start += 1 + id.bytesReadCount;
 
-  var start_time = data.getBytesAt(offset, offset+3);
-  var end_time = data.getBytesAt(offset+4, offset+7);
-  var start_offset = data.getBytesAt(offset+8, offset+11);
-  var end_offset = data.getBytesAt(offset+12, offset+15);
-
+  var start_time = data.getShortAt(start, start+3);
+  var end_time = data.getShortAt(start+4, start+7);
+  var start_offset = data.getShortAt(start+8, start+11);
+  var end_offset = data.getShortAt(start+12, start+15);
   return {
     // CHAP frame required elements
-    id: id,
-    start_time: '',
-    end_time: '',
-    start_offset: '',
-    end_offset: ''
+    id: id.toString(),
+    start_time: start_time,
+    end_time: end_time,
+    start_offset: start_offset,
+    end_offset: end_offset
   };
 };
 
